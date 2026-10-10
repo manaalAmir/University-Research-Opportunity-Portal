@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Research Opportunity Portal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>Research Opportunity Portal</h1>
+        <p>Discover research opportunities at your university</p>
+    </header>
+
+    <main class="container">
+        <section class="form-section">
+            <h2 id="form-title">Add a Research Opportunity</h2>
+
+            <form id="opportunity-form">
+                <label for="ResearchTitle">Research Title</label>
+                <input id="ResearchTitle" name="ResearchTitle" required>
+
+                <label for="ResearchDescription">Description</label>
+                <textarea id="ResearchDescription" name="ResearchDescription" required></textarea>
+
+                <label for="ResearchArea">Research Area</label>
+                <input id="ResearchArea" name="ResearchArea" required>
+
+                <label for="FacultyMemberName">Faculty Member</label>
+                <input id="FacultyMemberName" name="FacultyMemberName" required>
+
+                <label for="Department">Department</label>
+                <input id="Department" name="Department" required>
+
+                <label for="RequiredSkills">Required Skills</label>
+                <textarea id="RequiredSkills" name="RequiredSkills" required></textarea>
+
+                <label for="NumberOfAvailablePosition">Available Positions</label>
+                <input id="NumberOfAvailablePosition" name="NumberOfAvailablePosition"
+                       type="number" min="1" required>
+
+                <label for="ApplicationDeadline">Application Deadline</label>
+                <input id="ApplicationDeadline" name="ApplicationDeadline"
+                       type="date" required>
+
+                <label for="Status">Status</label>
+                <select id="Status" name="Status" required>
+                    <option value="Open">Open</option>
+                    <option value="Closed">Closed</option>
+                </select>
+
+                <div class="form-buttons">
+                    <button type="submit" id="submit-button">Add Opportunity</button>
+                    <button type="button" id="cancel-button" class="secondary" hidden>
+                        Cancel Edit
+                    </button>
+                </div>
+
+                <p id="form-message" role="status"></p>
+            </form>
+        </section>
+
+        <section class="opportunities-section">
+            <div class="section-heading">
+                <h2>Available Opportunities</h2>
+                <button type="button" id="refresh-button" class="secondary">
+                    Refresh
+                </button>
+            </div>
+
+            <p id="list-message" role="status">Loading opportunities...</p>
+            <div id="opportunities-list" class="opportunities-list"></div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
