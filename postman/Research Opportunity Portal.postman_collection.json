@@ -1,0 +1,319 @@
+{
+  "info": {
+    "_postman_id": "4a30997b-5e1b-4313-937f-8e7ea6b4592c",
+    "name": "Research Opportunity Portal",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58861752",
+    "_collection_link": "https://go.postman.co/collection/58861752-4a30997b-5e1b-4313-937f-8e7ea6b4592c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Research Opportunity 1",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"ResearchTitle\":\"AI in Education\",\r\n  \"ResearchDescription\":\"Study how AI tools can support university learning.\",\r\n  \"ResearchArea\":\"Artificial Intelligence\",\r\n  \"FacultyMemberName\":\"Dr. Ahmed Khan\",\r\n  \"Department\":\"Computer Science\",\r\n  \"RequiredSkills\":\"Python,Research,Data Analysis\",\r\n  \"NumberOfAvailablePosition\":2,\r\n  \"ApplicationDeadline\":\"2026-12-15\",\r\n  \"Status\":\"Open\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Research Opportunity 2",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"ResearchTitle\":\"Cybersecurity Awareness\",\r\n  \"ResearchDescription\":\"Explore ways to improve cybersecurity awareness among university students.\",\r\n  \"ResearchArea\":\"Cybersecurity\",\r\n  \"FacultyMemberName\":\"Dr. Alia\",\r\n  \"Department\":\"Computer Science\",\r\n  \"RequiredSkills\":\"Networking, Security, Research\",\r\n  \"NumberOfAvailablePosition\":3,\r\n  \"ApplicationDeadline\":\"2026-12-20\",\r\n  \"Status\":\"Open\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Research Opportunity 3",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"ResearchTitle\": \"Smart Campus Technology\",\r\n  \"ResearchDescription\": \"Investigate how smart technologies can improve university campus services.\",\r\n  \"ResearchArea\": \"Human-Computer Interaction\",\r\n  \"FacultyMemberName\": \"Dr. Manaal Amir\",\r\n  \"Department\":\"Computer Science\",\r\n  \"RequiredSkills\":\"UI Design,User Research,Prototyping\",\r\n  \"NumberOfAvailablePosition\":5,\r\n  \"ApplicationDeadline\":\"2026-12-25\",\r\n  \"Status\":\"Open\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Research Opportunity 4",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"ResearchTitle\":\"Data Science Research Project\",\r\n  \"ResearchDescription\":\"Analyze sample datasets to identify useful research insights.\",\r\n  \"ResearchArea\":\"Data Science\",\r\n  \"FacultyMemberName\":\"Dr. Fatima Noor\",\r\n  \"Department\":\"Computer Science\",\r\n  \"RequiredSkills\":\"Python,Statistics,Data Analysis\",\r\n  \"NumberOfAvailablePosition\":1,\r\n  \"ApplicationDeadline\":\"2026-12-30\",\r\n  \"Status\":\"Closed\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Retrieve All Research Opportunities",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Retrieve Research Opportunity By ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities/10",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities",
+            "10"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Existing Research Opportunity",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "\r\n{\r\n  \"ResearchTitle\":\"Use of AI in Education\",\r\n  \"ResearchDescription\": \"Study how AI tools can support personalized university learning.\",\r\n  \"ResearchArea\":\"Artificial Intelligence\",\r\n  \"FacultyMemberName\":\"Dr. Ahmed Khan\",\r\n  \"Department\":\"Computer Science\",\r\n  \"RequiredSkills\": \"Python, Research, Data Analysis\",\r\n  \"NumberOfAvailablePosition\":5,\r\n  \"ApplicationDeadline\":\"2026-12-15\",\r\n  \"Status\":\"Open\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities/10",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities",
+            "10"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Change Status from Open to Closed",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"ResearchTitle\":\"Use of AI in Education\",\r\n  \"ResearchDescription\":\"Study how AI tools can support personalized university learning.\",\r\n  \"ResearchArea\":\"Artificial Intelligence\",\r\n  \"FacultyMemberName\":\"Dr. Ahmed Khan\",\r\n  \"Department\":\"Computer Science\",\r\n  \"RequiredSkills\":\"Python, Research, Data Analysis\",\r\n  \"NumberOfAvailablePosition\":5,\r\n  \"ApplicationDeadline\":\"2026-12-15\",\r\n  \"Status\": \"Closed\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities/10",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities",
+            "10"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Deleting an Opportunity",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities/13",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities",
+            "13"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Requesting Deleted Opportunity Again",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Sending One Request With Invalid or Missing Data",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"ResearchTitle\":\"\",\r\n  \"ResearchDescription\":\"Study how AI tools can support university learning.\",\r\n  \"ResearchArea\":\"Artificial Intelligence\",\r\n  \"FacultyMemberName\":\"Dr. Ahmed Khan\",\r\n  \"Department\":\"Computer Science\",\r\n  \"RequiredSkills\":\"Python,Research,Data Analysis\",\r\n  \"NumberOfAvailablePosition\": 0,\r\n  \"ApplicationDeadline\": \"2026-12-15\",\r\n  \"Status\": \"Open\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:5000/api/opportunities",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "5000",
+          "path": [
+            "api",
+            "opportunities"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
