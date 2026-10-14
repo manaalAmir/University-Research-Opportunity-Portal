@@ -5,157 +5,109 @@ from datetime import date
 
 app=Flask(__name__)
 CORS(app)
-REQUIRED_FIELDS=["ResearchTitle","ResearchDescription","ResearchArea","FacultyMemberName","Department","RequiredSkills","NumberOfAvailablePosition","ApplicationDeadline","Status"]
+fields=["ResearchTitle","ResearchDescription","ResearchArea","FacultyMemberName","Department","RequiredSkills","NumberOfAvailablePosition","ApplicationDeadline","Status"]
 
-def validate_opportunity(data, partial=False):
-        if not isinstance(data, dict):
+def checkData(data):
+        if not isinstance(data,dict):
             return "Request body must be a JSON object"
 
-        if not partial:
-            missing=[
-                field for field in REQUIRED_FIELDS
-                if field not in data
-                or data[field] is None
-                or (isinstance(data[field], str) and not data[field].strip())
-            ]
-
-            if missing:
-                return "Missing or empty required fields:"+",".join(missing)
-        string_fields=["ResearchTitle","ResearchDescription","ResearchArea","FacultyMemberName","Department","RequiredSkills"]
+        for field in fields:
+                if field not in data or data[field] is None or data[field]=="":
+                        return field+" is missing or empty"
         
-        for field in REQUIRED_FIELDS:
-            if field not in data:
-                continue
-            value=data[field]
-            if field in string_fields:
-                if not isinstance(value,str) or not value.strip():
-                    return field+" must be a non-empty string"
-            elif field=="NumberOfAvailablePosition":
-                if isinstance(value,bool) or not isinstance(value,int):
-                    return "NumberOfAvailablePosition must be an integer"
-                if value<1:
-                    return "NumberOfAvailablePosition must be atleast 1"
-            elif field=="ApplicationDeadline":
-                if not isinstance(value,str):
-                    return "ApplicationDeadline must use YYYY-MM-DD format"
-                try:
-                    date.fromisoformat(value)
-                except ValueError:
-                    return "ApplicationDeadline must be a valid date in YYYY-MM-DD format"
-            elif field=="Status":
-                if value not in ["Open","Closed"]:
-                    return "Status must either be open or closed"
+        value=data["NumberOfAvailablePosition"]
+        if isinstance(value,bool) or not isinstance(value,int):
+                return "NumberOfAvailablePosition must be an integer"
+        if value<1:
+                return "NumberOfAvailablePosition must be atleast 1"
+                
+        try:
+                date.fromisoformat(data["ApplicationDeadline"])
+        except (ValueError,TypeError):
+                return "ApplicationDeadline must be a valid date in YYYY-MM-DD format"
+        
+        if data["Status"]!="Open" and data["Status"]!="Closed":
+                return "Status must be Open or Closed"
         return None
         
 @app.route("/",methods=["GET"])
 def home():
     return jsonify({"message":"University Research Opportunity Portal API is running"}),200
+        
 @app.route("/test-db", methods=["GET"])
-def test_db():
-    connection=None
-    cursor=None
+def testDb():
     try:
         connection=get_db_connection()
         cursor=connection.cursor()
         cursor.execute("SELECT 1")
         result=cursor.fetchone()
+        cursor.close()
+        connection.close()
         
         return jsonify({"message":"Database connected successfully","result": result[0]}),200
 
     except Exception as error:
-        app.logger.exception("Database connection test failed")
+        print(error)
         return jsonify({"error": "Database connection failed",}),500
-    
-    finally:
-        if cursor is not None:
-            cursor.close()
-        
-        if connection is not None and connection.is_connected():
-            connection.close()
 
 @app.route("/api/opportunities",methods=["POST"])
-def create_opportunity():
+def createOpportunity():
     data=request.get_json(silent=True)
-    error=validate_opportunity(data)
+    error=checkData(data)
 
     if error:
         return jsonify({"error": error}), 400
-    
-    connection=None
-    cursor=None
-    
+            
     try:
         connection=get_db_connection()
         cursor=connection.cursor()
-        query = """
-            INSERT INTO opportunities (
-                ResearchTitle,
-                ResearchDescription,
-                ResearchArea,
-                FacultyMemberName,
-                Department,
-                RequiredSkills,
-                NumberOfAvailablePosition,
-                ApplicationDeadline,
-                Status
-            )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """
-        values=tuple(data[field] for field in REQUIRED_FIELDS)
-        cursor.execute(query,values)
+        SQL=""" INSERT INTO opportunities 
+                (ResearchTitle,ResearchDescription,ResearchArea,FacultyMemberName,Department,RequiredSkills,NumberOfAvailablePosition,ApplicationDeadline,Status)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) """
+            
+        values=[]
+        for field in fields:
+            values.append(data[field])
+                
+        cursor.execute(SQL,tuple(values))
         connection.commit()
-        new_id=cursor.lastrowid
-        return jsonify({
-            "message":"Research Opportunity created successfully",
-            "ID":new_id
-        }),201
-    except Exception:
-        if connection is not None:
-            connection.rollback()
-        app.logger.exception("Failed to create opportunity")
-        return jsonify({"error":"Internal server error"}),500
-    finally:
-        if cursor is not None:
-            cursor.close()
-        if connection is not None and connection.is_connected():
-            connection.close()
+        newID=cursor.lastrowid
+        cursor.close()
+        connection.close()
+        return jsonify({"message":"Research Opportunity created successfully","ID":newID}),201
+            
+    except Exception as error:
+            print(error)
+            return jsonify({"error":"Internal server error"}),500
             
 @app.route("/api/opportunities",methods=["GET"])
-def get_all_opportunities():
-    connection=None
-    cursor=None
-    
+def getAllOpportunities():
     try:
         connection=get_db_connection()
         cursor=connection.cursor(dictionary=True)
         cursor.execute("SELECT * FROM opportunities ORDER BY ID")
         opportunities=cursor.fetchall()
+        cursor.close()
+        connection.close()
         
         for opportunity in opportunities:
             if opportunity["ApplicationDeadline"] is not None:
                 opportunity["ApplicationDeadline"]=(opportunity["ApplicationDeadline"].isoformat())
         return jsonify(opportunities),200
     
-    except Exception:
-        app.logger.exception("Failed to retrieve opportunities")
-        return jsonify({"error":"Internal server error"}),500
-    
-    finally:
-        if cursor is not None:
-            cursor.close()
-        if connection is not None and connection.is_connected():
-            connection.close()
-
-@app.route("/api/opportunities/<int:opportunity_id>",methods=["GET"])
-def get_opportunity(opportunity_id):
-    connection=None
-    cursor=None
-    
+    except Exception as error:
+            print(error)
+            return jsonify({"error":"Internal server error"}),500
+            
+@app.route("/api/opportunities/<int:opportunityID>",methods=["GET"])
+def getOpportunity(opportunityID):
     try:
         connection=get_db_connection()
         cursor=connection.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM opportunities WHERE ID=%s",(opportunity_id,))
+        cursor.execute("SELECT * FROM opportunities WHERE ID=%s",(opportunityID,))
         opportunity=cursor.fetchone() 
+        cursor.close()
+        connection.close()
         
         if opportunity is None:
             return jsonify({"error":"Research opportunity not found"}),404
@@ -163,102 +115,65 @@ def get_opportunity(opportunity_id):
            opportunity["ApplicationDeadline"]=(opportunity["ApplicationDeadline"].isoformat())
         return jsonify(opportunity),200
     
-    except Exception:
-        app.logger.exception("Failed to retrieve opportunity")
+    except Exception as error:
+        print(error)
         return jsonify({"error":"Internal server error"}),500
-    
-    finally:
-        if cursor is not None:
-            cursor.close()
-        if connection is not None and connection.is_connected():
-            connection.close()         
+            
+@app.route("/api/opportunities/<int:opportunityID>",methods=["PUT"])
+def updateOpportunity(opportunityID):
+        data=request.get_json(silent=True)
+        error=checkData(data)
+        
+        if error:
+                return jsonify({"error": error}), 400
+        
+        try:
+                connection=get_db_connection()
+                cursor=connection.cursor()
+                cursor.execute("SELECT ID FROM opportunities WHERE ID=%s",(opportunityID,))
+                
+                if cursor.fetchone() is None:
+                        cursor.close()
+                        connection.close()
+                        return jsonify({"error":"Research opportunity not found"}),404
+        
+                SQL=""" UPDATE opportunities
+                        SET ResearchTitle=%s,ResearchDescription=%s,ResearchArea=%s,FacultyMemberName=%s,Department=%s,RequiredSkills=%s,NumberOfAvailablePosition=%s,ApplicationDeadline= %s,Status=%s
+                        WHERE ID=%s """
 
-@app.route("/api/opportunities/<int:opportunity_id>",methods=["PUT"])
-def update_opportunity(opportunity_id):
-    data=request.get_json(silent=True)
-    
-    if not isinstance(data,dict) or not data:
-        return jsonify({"error":"Request body must be a non-empty JSON object"}),400
-     
-    unknown_fields=set(data.keys())-set(REQUIRED_FIELDS)
-    if unknown_fields:
-        return jsonify({"error":"Unknown fields:"+",".join(sorted(unknown_fields))}),400
-    
-    error=validate_opportunity(data,partial=True)
-    if error:
-        return jsonify({"error":error}),400
-    
-    connection=None
-    cursor=None
-    
+                values=[]
+                for field in fields:
+                        values.append(data[field])
+                
+                values.append(opportunityID)
+                cursor.execute(SQL,tuple(values))
+                connection.commit()
+                cursor.close()
+                connection.close()
+                return jsonify({"message":"Research opportunity updated successfully","ID":opportunityID}),200
+        
+        except Exception as error:
+                print(error)
+                return jsonify({"error":"Internal server error"}),500
+
+@app.route("/api/opportunities/<int:opportunityID>",methods=["DELETE"])
+def deleteOpportunity(opportunityID):
     try:
         connection=get_db_connection()
         cursor=connection.cursor()
-        cursor.execute("SELECT ID FROM opportunities WHERE ID=%s",(opportunity_id,))
-        
-        if cursor.fetchone() is None:
-            return jsonify({"error":"Research opportunity not found"}),400
-        
-        columns=list(data.keys())
-        assignments=",".join(f"{column}=%s" for column in columns)
-        values=[data[column] for column in columns]
-        values.append(opportunity_id)
-        query=f"""
-                UPDATE opportunities
-                SET {assignments}
-                WHERE ID=%s  
-            """
-        cursor.execute(query,tuple(values))
+        cursor.execute("DELETE FROM opportunities WHERE ID=%s",(opportunityID,))  
         connection.commit()
-        return jsonify({
-            "message":"Research opportunity updated successfully",
-            "ID":opportunity_id
-        }),200
-        
-    except Exception:
-        if connection is not None:
-            connection.rollback()
-        app.logger.exception("Failed to update opportunity")
-        return jsonify({"error":"Internal server error"}),500
-    
-    finally:
-        if cursor is not None:
-            cursor.close()
-        if connection is not None and connection.is_connected():
-            connection.close()
-    
-@app.route("/api/opportunities/<int:opportunity_id>",methods=["DELETE"])
-def delete_opportunity(opportunity_id):
-    connection=None
-    cursor=None
-    
-    try:
-        connection=get_db_connection()
-        cursor=connection.cursor()
-        cursor.execute(
-            "DELETE FROM opportunities WHERE ID=%s",
-            (opportunity_id,)
-        )  
-        
-        if cursor.rowcount==0:
+        deleted=cursor.rowcount
+        cursor.close()
+        connection.close()
+            
+        if deleted==0:
             return jsonify({"error":"Research opportunity not found"}),404
-        connection.commit() 
-        return jsonify({
-            "message":"Research opportunity deleted successfully",
-            "ID":opportunity_id
-        }),200
+        return jsonify({"message":"Research opportunity deleted successfully","ID":opportunityID}),200
     
-    except Exception:
-        if connection is not None:
-            connection.rollback()
-        app.logger.exception("Failed to delete opportunity")
+    except Exception as error:
+        print(error)
         return jsonify({"error":"Internal server error"}),500
-    
-    finally:
-        if cursor is not None:
-            cursor.close()
-        if connection is not None and connection.is_connected():
-            connection.close()
                
 if __name__=="__main__":
     app.run(debug=True)
