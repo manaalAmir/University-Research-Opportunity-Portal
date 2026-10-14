@@ -1,8 +1,9 @@
 # University Research Opportunity Portal
 
+
 ## Project Overview
 
-The University Research Opportunity Portal is a web-based application designed to help students discover research opportunities offered by faculty members. It provides a centralized place to view, create, update, and delete research opportunities.
+The University Research Opportunity Portal is a web-based application that provides a centralized place for students to discover research opportunities offered by university faculty members. It allows users to create, view, update, close, and delete research opportunities.
 
 ## Technologies Used
 
@@ -14,22 +15,22 @@ The University Research Opportunity Portal is a web-based application designed t
 ## Features
 
 - Create new research opportunities.
-- View all available research opportunities.
+- View all stored research opportunities.
 - Retrieve a specific opportunity using its ID.
-- Update existing research opportunities.
-- Change an opportunity's status between Open and Closed.
+- Update existing opportunity details.
+- Change an opportunity's status between `Open` and `Closed`.
 - Delete research opportunities.
 - Validate input data and return appropriate error responses.
-- Store research opportunities in a MySQL database.
+- Store research opportunity records in a MySQL database.
 
 ## Project Structure
 
 ```text
-University Research Opportunity Portal/
-├── backend/
-├── frontend/
-├── database/
-├── postman/
+University-Research-Opportunity-Portal/
+├── backend/       # Flask API and backend configuration
+├── frontend/      # HTML, CSS, and JavaScript user interface
+├── database/      # MySQL database schema
+├── postman/       # Exported Postman collection
 ├── .gitignore
 └── README.md
 ```
@@ -39,68 +40,65 @@ University Research Opportunity Portal/
 Install the following before running the project:
 
 - Python 3
-- XAMPP with MySQL, or a compatible MySQL server
+- MySQL Server 
 - Visual Studio Code
-- The VS Code Live Server extension (for the frontend)
-- Postman (optional, for API testing)
+- VS Code Live Server extension
+- Postman (for API testing)
 
 ## Database Setup
 
-1. Open XAMPP Control Panel and start MySQL.
+1. Start MySQL from the XAMPP Control Panel or start your installed MySQL server.
 2. Open MySQL Workbench or phpMyAdmin.
-3. Open the `database/schema.sql` file from this project.
-4. Execute the SQL script. It creates the `ResearchOpportunity` database and the `opportunities` table.
-5. Ensure MySQL is running on port `3306`, or update the port configuration if necessary.
+3. Open the SQL file `database/researchOpportunity.sql`.
+4. Execute the SQL script to create the `researchOpportunity` database and the required table.
+5. Ensure MySQL is running on the configured port, commonly `3306`.
 
 ## Backend Setup
 
 Open a terminal in the project's `backend` folder.
 
-### 1. Create a virtual environment
+### 1. Create a Virtual Environment
 
-Windows PowerShell:
-
-```powershell
+```bash
 python -m venv venv
 ```
 
-### 2. Activate the virtual environment
+### 2. Activate the Virtual Environment
+
+For Windows PowerShell:
 
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-If PowerShell blocks script execution, use Command Prompt and run:
+If PowerShell blocks script execution, use Command Prompt instead:
 
 ```bat
 venv\Scripts\activate.bat
 ```
 
-### 3. Install dependencies
+### 3. Install Dependencies
 
-```powershell
+```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure environment variables
+### 4. Configure Environment Variables
 
-Create a `.env` file inside `backend/` using the following settings. Replace the values if your local MySQL configuration differs.
+Create a local file named `.env` inside the `backend` folder and add the following configuration:
 
-```text
-DB_HOST=127.0.0.1
-DB_PORT=3306
+```ini
+DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=
-DB_NAME=ResearchOpportunity
+DB_NAME=researchOpportunity
 ```
 
-The example assumes that MySQL's `root` account has no password. If your MySQL account uses a password, enter it in `DB_PASSWORD`.
+### 5. Run the Backend
 
-Do not upload `.env` to GitHub.
+From the `backend` folder, run:
 
-### 5. Run the backend
-
-```powershell
+```bash
 python app.py
 ```
 
@@ -108,7 +106,7 @@ The Flask API should be available at:
 
 `http://127.0.0.1:5000`
 
-Keep this terminal running while using the frontend.
+Keep the backend terminal running while using the frontend.
 
 ## Frontend Setup
 
@@ -118,29 +116,60 @@ Keep this terminal running while using the frontend.
 4. Select **Open with Live Server**.
 5. The frontend should open in your browser.
 
-Make sure the Flask backend and MySQL are running before testing the frontend.
-
-## API Testing with Postman
-
-1. Open Postman.
-2. Import the collection JSON file from the `postman` folder.
-3. Ensure the backend is running at `http://127.0.0.1:5000`.
-4. Send the requests in the collection to test creating, retrieving, updating, and deleting opportunities, as well as validation and not-found responses.
+Make sure MySQL and the Flask backend are running before using the application.
 
 ## API Endpoints
+
+The API base URL is:
+
+`http://127.0.0.1:5000`
 
 | Method | Endpoint | Purpose |
 |---|---|---|
 | GET | `/api/opportunities` | Retrieve all opportunities |
-| GET | `/api/opportunities/<id>` | Retrieve one opportunity |
-| POST | `/api/opportunities` | Create an opportunity |
-| PUT | `/api/opportunities/<id>` | Update an opportunity |
+| GET | `/api/opportunities/<id>` | Retrieve an opportunity by ID |
+| POST | `/api/opportunities` | Create a new opportunity |
+| PUT | `/api/opportunities/<id>` | Update an existing opportunity |
 | DELETE | `/api/opportunities/<id>` | Delete an opportunity |
 
-## API Testing
+## Opportunity Fields
 
-The exported Postman collection is available in the `postman` folder. It contains requests for creating, retrieving, updating, and deleting opportunities, changing opportunity status, and testing validation and not-found responses.
+Each research opportunity contains the following fields:
 
-## Security Note
+| Field | Description |
+|---|---|
+| `ID` | Unique identifier generated by the database |
+| `ResearchTitle` | Title of the research opportunity |
+| `ResearchDescription` | Description of the opportunity |
+| `ResearchArea` | Research field or area |
+| `FacultyMemberName` | Name of the faculty member offering the opportunity |
+| `Department` | Associated department |
+| `RequiredSkills` | Skills required for the opportunity |
+| `NumberOfAvailablePosition` | Number of available positions |
+| `ApplicationDeadline` | Application deadline |
+| `Status` | Opportunity status: `Open` or `Closed` |
 
-Database credentials are stored in a local `.env` file and are not committed to the repository.
+## API Testing with Postman
+
+The exported Postman collection is stored in the `postman` folder.
+
+1. Open Postman.
+2. Import the exported collection JSON file from the `postman` folder.
+3. Ensure the Flask backend and MySQL server are running.
+4. Send the collection requests to test the API.
+
+The collection covers creating, retrieving, updating, closing, and deleting opportunities, as well as input validation and not-found responses.
+
+### Common HTTP Response Codes
+
+| Status Code | Meaning |
+|---|---|
+| `200 OK` | Request completed successfully, such as retrieving or updating a record |
+| `201 Created` | An opportunity was created successfully |
+| `400 Bad Request` | Submitted data is invalid or incomplete |
+| `404 Not Found` | The requested opportunity does not exist |
+| `500 Internal Server Error` | An unexpected server-side error occurred |
+
+
+**Repository:** [University Research Opportunity Portal](https://github.com/manaalAmir/University-Research-Opportunity-Portal)
+
