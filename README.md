@@ -1,5 +1,6 @@
 # University Research Opportunity Portal
 
+GitHub Repository: https://github.com/manaalAmir/University-Research-Opportunity-Portal
 
 ## Project Overview
 
